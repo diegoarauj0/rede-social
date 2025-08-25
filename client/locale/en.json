@@ -1,0 +1,84 @@
+{
+  "translation": {
+    "app": {
+      "name": "Social Network"
+    },
+    "auth": {
+      "login": {
+        "title": "Auth - Login",
+        "subTitle": "Access your account",
+        "submit": "Sign in",
+        "linkRegister": "Don’t have an account yet?",
+        "loading": "Signing in...",
+        "success": "Login successful",
+        "error": "Could not connect to the server, please try again later"
+      },
+      "register": {
+        "title": "Auth - Register",
+        "subTitle": "Create your account",
+        "submit": "Sign up",
+        "linkLogin": "Already have an account?",
+        "loading": "Creating account...",
+        "success": "Registration successful",
+        "error": "Could not create your account, please try again later"
+      }
+    },
+    "form": {
+      "labels": {
+        "username": "Username",
+        "nickname": "Nickname",
+        "password": "Password",
+        "email": "Email"
+      },
+      "placeholders": {
+        "username": "first name",
+        "email": "example@email.com",
+        "password": "********"
+      },
+      "validation": {
+        "string": {
+          "alphanum": "The field {{#label}} must only contain alpha-numeric characters",
+          "base": "The field {{#label}} must be a text.",
+          "empty": "The field {{#label}} cannot be empty.",
+          "email": "The field {{#label}} must be a valid email.",
+          "min": "The field {{#label}} must have at least {{#limit}} characters.",
+          "max": "The field {{#label}} must have at most {{#limit}} characters.",
+          "pattern": "The field {{#label}} does not match the expected format.",
+          "minDigits": "The field {{#label}} must contain at least {{#min}} digit(s).",
+          "minUppercase": "The field {{#label}} must contain at least {{#min}} uppercase letter(s).",
+          "minLowercase": "The field {{#label}} must contain at least {{#min}} lowercase letter(s).",
+          "minSpecialChars": "The field {{#label}} must contain at least {{#min}} special character(s)."
+        },
+        "number": {
+          "base": "The field {{#label}} must be a number.",
+          "min": "The field {{#label}} must be greater than or equal to {{#limit}}.",
+          "max": "The field {{#label}} must be less than or equal to {{#limit}}.",
+          "integer": "The field {{#label}} must be an integer."
+        },
+        "boolean": {
+          "base": "The field {{#label}} must be true or false."
+        },
+        "any": {
+          "required": "The field {{#label}} is required.",
+          "only": "The field {{#label}} must be one of the following values: {{#valids}}.",
+          "invalid": "The field {{#label}} contains an invalid value.",
+          "unknown": "The field {{#label}} unknown error."
+        },
+        "array": {
+          "base": "The field {{#label}} must be a list.",
+          "min": "The field {{#label}} must contain at least {{#limit}} item(s).",
+          "max": "The field {{#label}} must contain at most {{#limit}} item(s)."
+        },
+        "object": {
+          "base": "The field {{#label}} must be an object.",
+          "unknown": "The field {{#label}} is not allowed."
+        },
+        "database": {
+          "duplicate": "The {{#label}} is already in use by another user.",
+          "not_found": "The {{#label}} was not found.",
+          "incorrect": "The {{#label}} is incorrect."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis
+    restart: always
+    container_name: redis
+  mongo_db:
+    image: mongo
+    restart: always
+    container_name: mongo
+    ports:
+      - "27017:27017"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: rede-social-server
+    command: ["npm", "run", "dev"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_MONGODB_URL=mongodb://mongo_db/seu_banco
+      - DATABASE_REDIS_URL=redis://redis
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - redis
+      - mongo_db
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: rede-social-client
+    command: ["npm", "run", "dev"]
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - PROXY_URL=http://server:3000
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true

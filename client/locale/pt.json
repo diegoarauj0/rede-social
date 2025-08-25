@@ -1,0 +1,84 @@
+{
+  "translation": {
+    "app": {
+      "name": "Rede Social"
+    },
+    "auth": {
+      "login": {
+        "title": "Auth - Logar",
+        "subTitle": "Acesse sua conta",
+        "submit": "Entrar",
+        "linkRegister": "Não tem uma conta?",
+        "loading": "Acessando sua conta...",
+        "success": "Login feito com sucesso",
+        "error": "Não foi possível se comunicar com o servidor, tente novamente mais tarde"
+      },
+      "register": {
+        "title": "Auth - Registrar",
+        "subTitle": "Crie sua conta",
+        "submit": "Criar",
+        "linkLogin": "ja tem uma conta?",
+        "loading": "Criando sua conta...",
+        "success": "Conta criada com sucesso",
+        "error": "Não foi possível se comunicar com o servidor, tente novamente mais tarde"
+      }
+    },
+    "form": {
+      "labels": {
+        "username": "Nome de usuário",
+        "nickname": "Apelido",
+        "password": "Senha",
+        "email": "E-mail"
+      },
+      "placeholders": {
+        "username": "nome",
+        "email": "exemplo@email.com",
+        "password": "********"
+      },
+      "validation": {
+        "string": {
+          "alphanum": "O campo {{#label}} so pode conter letras e numeros",
+          "base": "O campo {{#label}} deve ser um texto.",
+          "empty": "O campo {{#label}} não pode estar vazio.",
+          "email": "O campo {{#label}} deve ser um e-mail válido.",
+          "min": "O campo {{#label}} deve ter no mínimo {{#limit}} caracteres.",
+          "max": "O campo {{#label}} deve ter no máximo {{#limit}} caracteres.",
+          "pattern": "O campo {{#label}} não corresponde ao formato esperado.",
+          "minDigits": "O campo {{#label}} deve conter pelo menos {{#min}} número(s).",
+          "minUppercase": "O campo {{#label}} deve conter pelo menos {{#min}} letra(s) maiúscula(s).",
+          "minLowercase": "O campo {{#label}} deve conter pelo menos {{#min}} letra(s) minúscula(s).",
+          "minSpecialChars": "O campo {{#label}} deve conter pelo menos {{#min}} caractere(s) especial(is)."
+        },
+        "number": {
+          "base": "O campo {{#label}} deve ser um número.",
+          "min": "O campo {{#label}} deve ser maior ou igual a {{#limit}}.",
+          "max": "O campo {{#label}} deve ser menor ou igual a {{#limit}}.",
+          "integer": "O campo {{#label}} deve ser um número inteiro."
+        },
+        "boolean": {
+          "base": "O campo {{#label}} deve ser verdadeiro ou falso."
+        },
+        "any": {
+          "required": "O campo {{#label}} é obrigatório.",
+          "only": "O campo {{#label}} deve ser um dos seguintes valores: {{#valids}}.",
+          "invalid": "O campo {{#label}} contém um valor inválido.",
+          "unknown": "O campo {{#label}} esta errado."
+        },
+        "array": {
+          "base": "O campo {{#label}} deve ser uma lista.",
+          "min": "O campo {{#label}} deve conter pelo menos {{#limit}} item(ns).",
+          "max": "O campo {{#label}} deve conter no máximo {{#limit}} item(ns)."
+        },
+        "object": {
+          "base": "O campo {{#label}} deve ser um objeto.",
+          "unknown": "O campo {{#label}} não é permitido."
+        },
+        "database": {
+          "duplicate": "O(a) {{#label}} esta duplicado(a).",
+          "not_found": "O(a) {{#label}} não foi encontrado(a).",
+          "incorrect": "O(a) {{#label}} esta incorreto(a)."
+        }
+      }
+    }
+  }
+}

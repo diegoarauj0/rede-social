@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2023"],
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@configs/*": ["./configs/*"],
+      "@contracts/*": ["./contracts/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@databases/*": ["./databases/*"],
+      "@exceptions/*": ["./exceptions/*"],
+      "@middlewares/*": ["./middlewares/*"],
+      "@repositories/*": ["./repositories/*"],
+      "@routes/*": ["./routes/*"],
+      "@schemas/*": ["./schemas/*"],
+      "@models/*": ["./models/*"],
+      "@services/*": ["./services/*"],
+      "@entities/*": ["./entities/*"],
+      "@useCases/*": ["./useCases/*"]
+    }
+  },
+  "exclude": ["./client"]
+}
