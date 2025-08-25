@@ -2,7 +2,6 @@ import { SessionEntity } from "@entities/session.entity"
 import { ISessionRepository } from "@contracts/repositories/session.repository"
 import { IJWTProviderService } from "@contracts/services/JWTProvider.service"
 import { IAuthenticateUserDTO } from "./authenticateUser.DTO"
-import { v4 as uuidv4 } from "uuid"
 
 export class AuthenticateUseCase {
   constructor(
@@ -13,10 +12,8 @@ export class AuthenticateUseCase {
   public async execute(
     authenticateUserDTO: IAuthenticateUserDTO,
   ): Promise<{ refreshToken: string; accessToken: string; session: SessionEntity }> {
-    const session = this.sessionRepository.createSession({
-      privateId: authenticateUserDTO.privateId as string,
-      accessId: uuidv4(),
-      refreshId: uuidv4(),
+    const session = this.sessionRepository.create({
+      privateId: authenticateUserDTO.privateId as string
     })
 
     await this.sessionRepository.save(session, {

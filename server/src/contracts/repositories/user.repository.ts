@@ -1,12 +1,10 @@
-import { UserEntity } from "entities/user.entity"
+import { IUserEntityProps, UserEntity } from "entities/user.entity"
 
 export interface IUserRepository {
-  findUserByEmail: (email: string) => Promise<UserEntity | null>
-  findUserByPublicId: (publicId: number) => Promise<UserEntity | null>
-  findUserByPrivateId: (privateId: string) => Promise<UserEntity | null>
-  countDocuments: () => Promise<number>
+  findByEmail: (email: string) => Promise<UserEntity | null>
+  findByUsername: (username: string) => Promise<UserEntity | null>
+  findByPublicId: (publicId: number) => Promise<UserEntity | null>
+  findByPrivateId: (privateId: string) => Promise<UserEntity | null>
   save: (user: UserEntity) => Promise<UserEntity>
-  createUser: (
-    user: Omit<UserEntity, "createdAt" | "updatedAt" | "publicId" | "privateId" | "database" | "toJSON">,
-  ) => UserEntity
+  create: (user: Omit<IUserEntityProps, "database">) => UserEntity
 }

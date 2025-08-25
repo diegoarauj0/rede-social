@@ -40,7 +40,7 @@ export class LoginController {
         status: "Ok",
         message: "Login successful.",
         data: {
-          user: user.toJSON(),
+          user: user.toUserData(),
         },
       })
   }

@@ -1,38 +1,45 @@
 import { ISessionRepository } from "@contracts/repositories/session.repository"
-import { SessionEntity } from "@entities/session.entity"
+import { ISessionEntityProps, SessionEntity } from "@entities/session.entity"
 import { redis } from "@databases/redis.database"
+import { v4 as uuidv4 } from "uuid"
+
+interface IExpires {
+  refresh: number
+  access: number
+}
 
 export class SessionRepository implements ISessionRepository {
-  public async save(
-    session: SessionEntity,
-    expires: { refresh: number; access: number },
-  ): Promise<SessionEntity> {
-    if (session.database) {
-      throw new Error("Cannot save a session that already exists in the database.")
-    }
+  public async save(session: SessionEntity, expires: IExpires): Promise<SessionEntity> {
+    if (session.database) await this.remove(session)
 
-    const newSession = new SessionEntity({
-      ...session,
-      createdAt: new Date(),
-      database: true,
+    const sessionEntity = new SessionEntity({
+      privateId: session.privateId,
+      database: {
+        createdAt: new Date(),
+        accessId: uuidv4(),
+        refreshId: uuidv4(),
+      },
     })
 
-    const { privateId, accessId, refreshId } = session
-
     await Promise.all([
-      redis.set(`sessions:${privateId}:${accessId}`, newSession.stringify(), "EX", expires.access),
-      redis.set(`sessions:${privateId}:${refreshId}`, newSession.stringify(), "EX", expires.refresh),
+      redis.set(sessionEntity.accessKey, sessionEntity.stringify(), "EX", expires.access),
+      redis.set(sessionEntity.refreshKey, sessionEntity.stringify(), "EX", expires.refresh),
     ])
 
-    return newSession
+    return sessionEntity
   }
 
-  public createSession(session: Omit<SessionEntity, "createdAt" | "database" | "stringify">): SessionEntity {
+  public async remove(session: SessionEntity): Promise<boolean> {
+    if (!session.database) return false
+
+    await Promise.all([redis.del(session.refreshKey), redis.del(session.accessKey)])
+
+    return true
+  }
+
+  public create(session: Omit<ISessionEntityProps, "database">): SessionEntity {
     return new SessionEntity({
-      database: false,
       privateId: session.privateId,
-      refreshId: session.refreshId,
-      accessId: session.accessId,
     })
   }
 }

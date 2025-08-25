@@ -12,7 +12,7 @@ export class ValidateUserUseCase {
   ) {}
 
   public async execute(validateUserDTO: IValidateUserDTO): Promise<UserEntity> {
-    const user = await this.userRepository.findUserByEmail(validateUserDTO.email)
+    const user = await this.userRepository.findByEmail(validateUserDTO.email)
 
     if (!user) {
       throw new ValidationException(

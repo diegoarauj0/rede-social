@@ -2,7 +2,6 @@ import { ErrorRequestHandler, Request, Response, NextFunction, response } from "
 import { BaseException, ExceptionStatus } from "@exceptions/base.exception"
 import { ValidationError } from "joi"
 import { ValidationException } from "@exceptions/validation.exception"
-import { MongoServerErrorException } from "@exceptions/mongoServerError.exception"
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -35,12 +34,6 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
     const validationException = new ValidationException(details)
 
     return res.status(validationException.statusCode).json(formatErrorResponse(validationException))
-  }
-
-  if (error.code !== undefined) {
-    const mongoServerError = new MongoServerErrorException(error)
-
-    return res.status(mongoServerError.statusCode).json(formatErrorResponse(mongoServerError))
   }
 
   console.error(error)

@@ -40,7 +40,7 @@ export class RegisterController {
         status: "Created",
         message: "Account created successfully.",
         data: {
-          user: user.toJSON(),
+          user: user.toUserData(),
         },
       })
   }
