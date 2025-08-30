@@ -1,7 +1,7 @@
 import express, { Application, Router } from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import { notFoundHandler, errorHandler } from "@middlewares/errorHandler.middleware"
+import { MiddlewareFactory } from "@factories/middleware.factory"
 import { client } from "./client"
 
 export class App {
@@ -29,7 +29,9 @@ export class App {
   }
 
   private initializeErrorHandling(): void {
-    this.app.use(notFoundHandler)
-    this.app.use(errorHandler)
+    const errorHandlerMiddleware = MiddlewareFactory.createErrorHandlerMiddleware()
+
+    this.app.use(errorHandlerMiddleware.notFoundHandler)
+    this.app.use(errorHandlerMiddleware.execute)
   }
 }

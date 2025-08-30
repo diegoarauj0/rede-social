@@ -1,19 +1,19 @@
 import { SessionEntity } from "@entities/session.entity"
 import { ISessionRepository } from "@contracts/repositories/session.repository"
 import { IJWTProviderService } from "@contracts/services/JWTProvider.service"
-import { IAuthenticateUserDTO } from "./authenticateUser.DTO"
+import { IAuthenticateUserDTO, IAuthenticateUserUseCase } from "@contracts/useCases/authenticateUser.useCase"
 
-export class AuthenticateUseCase {
+export class AuthenticateUseCase implements IAuthenticateUserUseCase {
   constructor(
     private sessionRepository: ISessionRepository,
     private JWTProviderService: IJWTProviderService,
   ) {}
 
-  public async execute(
-    authenticateUserDTO: IAuthenticateUserDTO,
-  ): Promise<{ refreshToken: string; accessToken: string; session: SessionEntity }> {
+  public async authenticate(
+    dto: IAuthenticateUserDTO,
+  ): Promise<{ token: { refresh: string; access: string }; session: SessionEntity }> {
     const session = this.sessionRepository.create({
-      privateId: authenticateUserDTO.privateId as string
+      privateId: dto.privateId as string,
     })
 
     await this.sessionRepository.save(session, {
@@ -21,24 +21,24 @@ export class AuthenticateUseCase {
       refresh: Number(process.env.SESSION_REFRESH_EXPIRE || 0),
     })
 
-    const accessToken = this.JWTProviderService.create(
+    const access = this.JWTProviderService.create(
       {
-        access: session.accessId,
+        accessId: session.accessId,
         privateId: session.privateId,
       },
       process.env.SESSION_ACCESS_SECRET,
       Number(process.env.SESSION_ACCESS_EXPIRE) * 1000,
     )
 
-    const refreshToken = this.JWTProviderService.create(
+    const refresh = this.JWTProviderService.create(
       {
-        refresh: session.refreshId,
+        refreshId: session.refreshId,
         privateId: session.privateId,
       },
       process.env.SESSION_ACCESS_SECRET,
       Number(process.env.SESSION_REFRESH_EXPIRE) * 1000,
     )
 
-    return { accessToken, refreshToken, session }
+    return { token: { refresh, access }, session }
   }
 }

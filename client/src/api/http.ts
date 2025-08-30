@@ -1,41 +1,7 @@
 import axios from "axios"
-import { ValidationError, type IValidationErrorProps } from "./error/validationError"
-import { ClientError, type IClientErrorStatus, type IErrorResponseFormat } from "./error/clientError"
-
-export interface ISuccessStatus {
-  Ok: "Ok"
-  Created: "Created"
-}
-
-export interface IUserData {
-  privateId: string
-  publicId: number
-  createdAt: Date
-  updatedAt: Date
-  username: string
-  nickname: string
-}
-
-export interface ISuccessResponseFormat {
-  User: "User"
-}
-
-export interface IErrorResponse<Error = unknown> {
-  success: false
-  responseFormat: keyof IErrorResponseFormat
-  status: keyof IClientErrorStatus
-  message: string
-  error?: Error
-  stack?: string
-}
-
-export interface ISuccessResponse {
-  success: true
-  responseFormat: keyof ISuccessResponse
-  status: keyof ISuccessResponse
-  message: string
-  data: { user?: IUserData }
-}
+import { ApiClientError } from "./error/clientError"
+import { ApiValidationError } from "./error/validationError"
+import type { IApiResponse } from "./type"
 
 export const http = axios.create({
   baseURL: "/api",
@@ -46,13 +12,13 @@ http.interceptors.response.use(
   response => response,
   error => {
     if (error.response?.data?.success === false) {
-      const errorResponse = error.response.data as IErrorResponse
+      const errorResponse = error.response.data as IApiResponse<false>
 
       if (errorResponse.responseFormat === "ValidationError") {
-        return Promise.reject(new ValidationError(errorResponse as IValidationErrorProps))
+        return Promise.reject(new ApiValidationError(errorResponse as any))
       }
 
-      return Promise.reject(new ClientError(errorResponse))
+      return Promise.reject(new ApiClientError(errorResponse))
     }
 
     return Promise.reject(error)

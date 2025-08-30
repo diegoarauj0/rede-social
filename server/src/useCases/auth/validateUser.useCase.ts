@@ -1,18 +1,18 @@
 import { UserEntity } from "entities/user.entity"
-import { IValidateUserDTO } from "./validateUser.DTO"
-import { IUserRepository } from "contracts/repositories/user.repository"
 import { IPasswordHasherService } from "contracts/services/passwordHasher.service"
-import { ValidationException } from "@exceptions/validation.exception"
+import { ValidationErrorType, ValidationException } from "@exceptions/validation.exception"
 import { ExceptionStatus } from "@exceptions/base.exception"
+import { IValidateUserDTO, IValidateUserUseCase } from "@contracts/useCases/validateUser.useCase"
+import { IUserRepository } from "@contracts/repositories/user.repository"
 
-export class ValidateUserUseCase {
+export class ValidateUserUseCase implements IValidateUserUseCase {
   constructor(
     private userRepository: IUserRepository,
     private passwordHasherService: IPasswordHasherService,
   ) {}
 
-  public async execute(validateUserDTO: IValidateUserDTO): Promise<UserEntity> {
-    const user = await this.userRepository.findByEmail(validateUserDTO.email)
+  public async validate(dto: IValidateUserDTO): Promise<UserEntity> {
+    const user = await this.userRepository.findByEmail(dto.email)
 
     if (!user) {
       throw new ValidationException(
@@ -20,22 +20,22 @@ export class ValidateUserUseCase {
           {
             key: "email",
             label: "email",
-            type: "database.not_found",
-            value: validateUserDTO.email,
+            type: ValidationErrorType.NotFound,
+            value: dto.email,
           },
         ],
         ExceptionStatus.NotFound,
       )
     }
 
-    if (!(await this.passwordHasherService.comparePassword(validateUserDTO.password, user.password))) {
+    if (!(await this.passwordHasherService.comparePassword(dto.password, user.password))) {
       throw new ValidationException(
         [
           {
             key: "password",
             label: "password",
-            type: "database.incorrect",
-            value: validateUserDTO.password,
+            type: ValidationErrorType.Incorrect,
+            value: dto.password,
           },
         ],
         ExceptionStatus.Unauthorized,

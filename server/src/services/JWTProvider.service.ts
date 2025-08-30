@@ -7,11 +7,11 @@ export class JWTProviderService implements IJWTProviderService {
     return JWT.sign(payload, secret, { expiresIn: expiresIn })
   }
 
-  public decode(token: string): string {
+  public decode(token: string): any {
     return JWT.decode(token) as string
   }
 
-  public verify(token: string, secret: string): string {
+  public verify(token: string, secret: string): any {
     return JWT.verify(token, secret) as string
   }
 }

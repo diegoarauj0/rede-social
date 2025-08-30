@@ -1,34 +1,26 @@
-import { ClientError, type IClientErrorProps } from "./clientError"
+import type { IApiValidationError } from "@api/type"
 import i18n from "../../i18n"
+import { ApiClientError, type IApiClientError } from "./clientError"
 
-export interface IValidationErrorDetail {
-  key: string
-  label: string
-  type: string
-  value: unknown
-  message: string
-  context: Record<string, unknown>
+export interface IValidationError extends Omit<IApiClientError, "details" | "responseFormat"> {
+  details: { ValidationError: IApiValidationError[] }
 }
 
-export interface IValidationErrorProps extends IClientErrorProps {
-  error?: IValidationErrorDetail[]
-}
+export class ApiValidationError extends ApiClientError {
+  private readonly details: IApiValidationError[]
 
-export class ValidationError extends ClientError {
-  private readonly details: IValidationErrorDetail[]
-
-  constructor(validationErrorProps: IValidationErrorProps) {
-    super(validationErrorProps)
+  constructor(validationError: IValidationError) {
+    super({ ...validationError, responseFormat: "ValidationError" })
 
     this.name = new.target.name
 
     this.details =
-      validationErrorProps.error?.map(detail => {
+      validationError.details.ValidationError?.map(detail => {
         return this.replacePlaceholders(this.translate(detail))
       }) || []
   }
 
-  private translate(detail: IValidationErrorDetail): IValidationErrorDetail {
+  private translate(detail: IApiValidationError): IApiValidationError {
     return {
       ...detail,
       message: i18n.t(`form.validation.${detail.type}`, { defaultValue: detail.message }),
@@ -36,7 +28,7 @@ export class ValidationError extends ClientError {
     }
   }
 
-  private replacePlaceholders(detail: IValidationErrorDetail): IValidationErrorDetail {
+  private replacePlaceholders(detail: IApiValidationError): IApiValidationError {
     let message = detail.message
 
     for (const [key, value] of Object.entries({ ...detail, ...detail.context })) {
@@ -60,7 +52,7 @@ export class ValidationError extends ClientError {
     return details as Record<Key, string>
   }
 
-  public getDetails(): IValidationErrorDetail[] {
+  public getDetails(): IApiValidationError[] {
     return [...this.details]
   }
 }

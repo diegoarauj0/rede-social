@@ -42,4 +42,44 @@ export class SessionRepository implements ISessionRepository {
       privateId: session.privateId,
     })
   }
+
+  public async findByAccessId(accessId: string, privateId: string): Promise<SessionEntity | null> {
+    const falseSession = new SessionEntity({
+      privateId: privateId,
+      database: { accessId: accessId, createdAt: new Date(), refreshId: "" },
+    })
+
+    const stringSession = await redis.get(falseSession.accessKey)
+
+    if (stringSession === null) {
+      return null
+    }
+
+    const json = JSON.parse(stringSession)
+
+    return new SessionEntity({
+      privateId: json.privateId,
+      database: { accessId: json.accessId, refreshId: json.refreshId, createdAt: json.createdAt },
+    })
+  }
+
+  public async findByRefreshId(refreshId: string, privateId: string): Promise<SessionEntity | null> {
+    const falseSession = new SessionEntity({
+      privateId: privateId,
+      database: { accessId: "", createdAt: new Date(), refreshId: refreshId },
+    })
+
+    const stringSession = await redis.get(falseSession.accessKey)
+
+    if (stringSession === null) {
+      return null
+    }
+
+    const json = JSON.parse(stringSession)
+
+    return new SessionEntity({
+      privateId: json.privateId,
+      database: { accessId: json.accessId, refreshId: json.refreshId, createdAt: json.createdAt },
+    })
+  }
 }

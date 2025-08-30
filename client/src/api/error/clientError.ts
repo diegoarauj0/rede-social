@@ -1,36 +1,20 @@
-export interface IErrorResponseFormat {
-  Default: "Default"
-  ValidationError: "ValidationError"
-}
+import type { IApiDetails, IApiErrorResponseFormat, IApiErrorStatus } from "@api/type"
 
-export interface IClientErrorProps {
-  status: keyof IClientErrorStatus
+export interface IApiClientError {
+  responseFormat: keyof IApiErrorResponseFormat
+  status: keyof IApiErrorStatus
+  details?: IApiDetails
   message: string
-  responseFormat: keyof IErrorResponseFormat
   stack?: string
-  error?: unknown
 }
 
-export interface IClientErrorStatus {
-  BadRequest: "BadRequest"
-  Unauthorized: "Unauthorized"
-  NotFound: "NotFound"
-  Conflict: "Conflict"
-  InternalServerError: "InternalServerError"
-}
+export class ApiClientError extends Error {
+  public clientError: IApiClientError
 
-export class ClientError extends Error {
-  public readonly status: keyof IClientErrorStatus
-  public readonly responseFormat: keyof IErrorResponseFormat
-  public readonly serverStackError?: string
-  public readonly error?: unknown
+  constructor(clientError: IApiClientError, message?: string) {
+    super(message || clientError.message)
 
-  constructor(props: IClientErrorProps) {
-    super(props.message)
+    this.clientError = clientError
     this.name = new.target.name
-    this.status = props.status
-    this.serverStackError = props.stack
-    this.responseFormat = props.responseFormat
-    this.error = props.error
   }
 }

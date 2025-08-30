@@ -1,4 +1,5 @@
-import { http, type ISuccessResponse } from "./http"
+import { http } from "./http"
+import type { IApiResponse } from "./type"
 
 export interface ILoginBody {
   email: string
@@ -11,12 +12,12 @@ export interface IRegisterBody {
   password: string
 }
 
-export async function login(body: ILoginBody): Promise<ISuccessResponse> {
-  const response = await http.post<ISuccessResponse>("/auth/login", body)
+export async function login(body: ILoginBody): Promise<IApiResponse<true>> {
+  const response = await http.post<IApiResponse<true>>("/auth/login", body)
   return response.data
 }
 
-export async function register(body: IRegisterBody): Promise<ISuccessResponse> {
-  const response = await http.post<ISuccessResponse>("/auth/register", body)
+export async function register(body: IRegisterBody): Promise<IApiResponse<true>> {
+  const response = await http.post<IApiResponse<true>>("/auth/register", body)
   return response.data
 }

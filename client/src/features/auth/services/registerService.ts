@@ -1,8 +1,8 @@
 import { register, type IRegisterBody } from "@api/auth"
-import type { IUserData } from "@api/http"
+import type { IApiUserData } from "@api/type"
 
-export async function registerService(registerBody: IRegisterBody): Promise<{ user: IUserData }> {
+export async function registerService(registerBody: IRegisterBody): Promise<{ user: IApiUserData }> {
   const response = await register(registerBody)
 
-  return { user: response.data.user as IUserData }
+  return { user: response.data?.User as IApiUserData }
 }
